@@ -1,0 +1,191 @@
+{% extends 'userview/base.html' %}
+{% load static %}
+{% block content %}
+
+
+        <!-- Breadcrumb Start -->
+        <div class="breadcrumb-wrap">
+            <div class="container-fluid">
+                <div class="mx-auto">
+    <p style="font-size:24px;padding-top:11px"><a class="anchor" href="{% url 'userindex' %}">Home</a>|<a class="anchor" href="{% url 'productlist' %}" >Products</a>|product-list</p>
+  </div>
+            </div>
+        </div>
+        <!-- Breadcrumb End -->
+
+        <!-- Product List Start -->
+        <div class="product-view">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="product-view-top">
+                                    <div class="row">
+<!--                                        <div class="col-md-4">-->
+<!--                                            <div class="product-search">-->
+<!--                                                <input type="email" value="Search">-->
+<!--                                                <button><i class="fa fa-search"></i></button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <div class="col-md-4">
+                                            <div class="product-short">
+                                                <div class="dropdown">
+                                                    <div class="dropdown-toggle" data-toggle="dropdown">Product short by</div>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                       <a class="dropdown-item" href="{% url 'sort_products' %}?sort=newest">Newest</a>
+                                                        <a class="dropdown-item" href="{% url 'sort_products' %}?sort=popular">Popular</a>
+                                                          <a class="dropdown-item" href="{% url 'sort_products' %}?sort=rating">Rating</a>
+<!--                                                         <a class="dropdown-item" href="{% url 'sort_products' %}?sort=stock">Stock</a>-->
+<!--                                                            <a class="dropdown-item" href="{% url 'sort_products' %}?sort=outofstock">Outofstock</a>-->
+<!--                                                        <a href="#" class="dropdown-item">Most sale</a>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="product-price-range">
+                                                <div class="dropdown">
+                                                    <div class="dropdown-toggle" data-toggle="dropdown">Product price range</div>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item" href="{% url 'sort_products' %}?sort=low">Low to High</a>
+                                                       <a class="dropdown-item" href="{% url 'sort_products' %}?sort=high">High to Low</a>
+<!--                                                        <a class="dropdown-item" href="{% url 'sort_products' %}?sort=newest">Newest</a>-->
+<!--                                                          <a class="dropdown-item" href="{% url 'sort_products' %}?sort=popular">Popular</a>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                          {% for i in products %}
+                            <div class="col-md-3">
+                                <div class="product-item">
+                                    <div class="product-title">
+                                      <small style="color:white">{{i.product.product_name}}</small>
+                                        <div class="rating-star">
+            <span title="{{ i.rating }}">
+            <!-- By default the star is full else it is empty otherwise it is half -->
+                <i style="color:#FF6F61" class="fa fa-star{% if i.rating < 0.5%}-o{% elif i.rating >= 0.5 and i.rating < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+                <i  style="color:#FF6F61" class="fa fa-star{% if i.rating < 1.5%}-o{% elif i.rating >= 1.5 and i.rating < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+                <i  style="color:#FF6F61" class="fa fa-star{% if i.rating < 2.5%}-o{% elif i.rating >= 2.5 and i.rating < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+                <i style="color:#FF6F61" class="fa fa-star{% if i.rating < 3.5%}-o{% elif i.rating >= 3.5 and i.rating < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+                <i style="color:#FF6F61" class="fa fa-star{% if i.rating < 4.5%}-o{% elif i.rating >= 4.5 and i.rating < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+            </span>
+            <span><strong>( {{ review.rating }} )</strong></span>
+        </div>
+                                    </div>
+                                    <div >
+
+                                             <a href="{% url 'productlistdetail' i.id %}">
+                                    <img src="{{i.product.product_image.url}}" width="235" height="205" alt="Product Image">
+                                </a>
+
+                                    </div>
+                                    <div class="product-price">
+                                      <h4 style="color:white"><i class="fas fa-rupee-sign"></i>{{i.discounted_price|floatformat:"0"}} <small><del>{{i.product_price|floatformat:"0"}}</del></small></h4>
+                                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                                {% endfor %}
+                        </div>
+
+
+                        <!-- Pagination Start -->
+                        <div class="col-lg-12">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if products.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+            {% for num in products.paginator.page_range %}
+            <li class="page-item {% if num == products.number %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endfor %}
+            {% if image.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+                        <!-- Pagination Start -->
+                    </div>
+
+                    <!-- Side Bar Start -->
+                    <div class="col-lg-4 sidebar">
+                        <div class="sidebar-widget category">
+                            <h2 class="title">Category</h2>
+                            <nav class="navbar bg-light">
+                                <ul class="navbar-nav">
+                                    {% for i in category %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'category' i.id %}"><i class="fa fa-female"></i>{{i}}</a>
+                                    </li>
+<!--                                    <li class="nav-item">-->
+<!--                                        <a class="nav-link" href="#"><i class="fa fa-child"></i>Kids & Babies Clothes</a>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item">-->
+<!--                                        <a class="nav-link" href="#"><i class="fa fa-tshirt"></i>Men & Women Clothes</a>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item">-->
+<!--                                        <a class="nav-link" href="#"><i class="fa fa-mobile-alt"></i>Gadgets & Accessories</a>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item">-->
+<!--                                        <a class="nav-link" href="#"><i class="fa fa-microchip"></i>Electronics & Accessories</a>-->
+<!--                                    </li>-->
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                        </div>
+
+
+
+                        <div class="sidebar-widget brands">
+                            <h2 class="title">Our Publishers</h2>
+                            <ul>
+                                <li><a href="#">Penguin Random House </a><span>(45)</span></li>
+                                <li><a href="#">Hachette Book Group </a><span>(34)</span></li>
+                                <li><a href="#">Macmillan Publishers </a><span>(67)</span></li>
+                                <li><a href="#">Scholastic</a><span>(74)</span></li>
+                                <li><a href="#">HarperCollins </a><span>(89)</span></li>
+                                <li><a href="#">Wiley</a><span>(28)</span></li>
+                            </ul>
+                        </div>
+
+                        <div class="sidebar-widget tag">
+                            <h2 class="title">Tags Cloud</h2>
+                            <a href="#">Lorem ipsum</a>
+                            <a href="#">Vivamus</a>
+                            <a href="#">Phasellus</a>
+                            <a href="#">pulvinar</a>
+                            <a href="#">Curabitur</a>
+                            <a href="#">Fusce</a>
+                            <a href="#">Sem quis</a>
+                            <a href="#">Mollis metus</a>
+                            <a href="#">Sit amet</a>
+                            <a href="#">Vel posuere</a>
+                            <a href="#">orci luctus</a>
+                            <a href="#">Nam lorem</a>
+                        </div>
+                    </div>
+                    <!-- Side Bar End -->
+                </div>
+            </div>
+        </div>
+{% endblock %}
+

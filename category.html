@@ -1,0 +1,63 @@
+{% extends 'userview/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% if category %}
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'userindex' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ category.category_name }}</li>
+              </ol>
+            </nav>
+            {% else %}
+            <h1>Product not found</h1>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        {% if products %}
+        {% for product in products %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                 <div>
+                                <a href="{% url 'productdetail' product.id %}">
+                                    <img src="{{product.product.product_image.url}}" width="346" height="350" alt="Product Image">
+                                </a>
+
+                            </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ product.product.product_name }}</h4>
+                    <span title="{{ product.rating }}/5">
+                        <!-- By default the star is full else it is empty otherwise it is half -->
+                        <i style="color:yellow" class="fa fa-star{% if product.rating < 0.5%}-o{% elif product.rating >= 0.5 and product.rating < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i style="color:yellow" class="fa fa-star{% if product.rating < 1.5%}-o{% elif product.rating >= 1.5 and product.rating < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i style="color:yellow" class="fa fa-star{% if product.rating < 2.5%}-o{% elif product.rating >= 2.5 and product.rating < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i style="color:yellow" class="fa fa-star{% if product.rating < 3.5%}-o{% elif product.rating >= 3.5 and product.rating < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i style="color:yellow" class="fa fa-star{% if product.rating < 4.5%}-o{% elif product.rating >= 4.5 and product.rating < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+                    </span>
+                    <span><strong>( {{ review.rating }}/5 )</strong></span>
+                    <div class="product-price">
+                        <h4><i class="fas fa-rupee-sign"></i>{{ product.discounted_price|floatformat:"0" }} <small><del>{{ product.product_price|floatformat:"0" }}</del></small></h4>
+                    </div>
+                    <a href="#" class="btn btn-primary">Buy Now</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- Display "Products Not Found" message if no products are found -->
+        <div class="col-md-12">
+            <div class="card mb-4 shadow-sm text-center">
+                <div class="card-body">
+                    <h2 class="mt-5" style="color:#FF6F61">No products found for {{ category.category_name }}</h2><p class="lead">Check back later for updates or explore other categories.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
